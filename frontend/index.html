@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Reader - AI Smart Document Reader</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Core UI styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+    <link rel="stylesheet" href="pdfjs-custom.css">
+    <!-- Component Scripts -->
+</head>
+<body class="dark-theme">
+    
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <span class="logo-text">Nexus<span class="highlight">Reader</span></span>
+        </div>
+        <div class="toolbar">
+            <button class="tool-btn action-btn tooltip" data-tooltip="Upload Document" id="upload-btn">
+                <i class="fa-solid fa-file-arrow-up"></i>
+                <input type="file" id="file-upload" accept=".pdf,.txt,.docx" hidden>
+            </button>
+            <button class="tool-btn tooltip" data-tooltip="Toggle Dark Mode" id="theme-toggle">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+            <div class="avatar-circle">
+                <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="User">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Split Workspace -->
+    <main class="workspace">
+        <!-- Left Panel: Document Viewer -->
+        <section class="panel doc-panel" id="doc-panel">
+            <div class="panel-header">
+                <h2><i class="fa-regular fa-file-pdf"></i> Document</h2>
+                <div class="zoom-controls">
+                    <button class="icon-btn tooltip" data-tooltip="Zoom Out" id="zoom-out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                    <span class="zoom-level">100%</span>
+                    <button class="icon-btn tooltip" data-tooltip="Zoom In" id="zoom-in"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                </div>
+            </div>
+            <div class="panel-content doc-container" id="doc-container">
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                    <h3>No Document Loaded</h3>
+                    <p>Upload a PDF, DOCX, or TXT file to begin reading.</p>
+                    <button class="primary-btn" onclick="document.getElementById('file-upload').click()">Browse Files</button>
+                </div>
+                <!-- Document pages will be rendered here -->
+            </div>
+        </section>
+
+        <!-- Resizer Handle -->
+        <div class="resizer" id="resizer">
+            <div class="resizer-handle"></div>
+        </div>
+
+        <!-- Right Panel: Notes & Knowledge -->
+        <section class="panel notes-panel" id="notes-panel">
+            <div class="panel-header">
+                <div class="tabs">
+                    <button class="tab active" data-target="notes-tab"><i class="fa-regular fa-note-sticky"></i> Notes</button>
+                    <button class="tab" data-target="knowledge-tab"><i class="fa-solid fa-brain"></i> Knowledge</button>
+                </div>
+            </div>
+            
+            <div class="panel-content tab-content-container">
+                <!-- Notes Tab -->
+                <div class="tab-content active" id="notes-tab">
+                    <div class="notes-toolbar">
+                        <button class="icon-btn tooltip" data-tooltip="Bold"><i class="fa-solid fa-bold"></i></button>
+                        <button class="icon-btn tooltip" data-tooltip="Italic"><i class="fa-solid fa-italic"></i></button>
+                        <button class="icon-btn tooltip" data-tooltip="List"><i class="fa-solid fa-list"></i></button>
+                        <button class="icon-btn tooltip link-anchor-btn" data-tooltip="Insert Location Anchor"><i class="fa-solid fa-link"></i> Add Anchor</button>
+                    </div>
+                    <div class="editor" contenteditable="true" id="notes-editor" placeholder="Start typing your notes here..."></div>
+                </div>
+
+                <!-- Knowledge Tab -->
+                <div class="tab-content" id="knowledge-tab">
+                    <div class="knowledge-cards" id="knowledge-container">
+                        <div class="empty-state sm">
+                            <i class="fa-solid fa-lightbulb"></i>
+                            <p>Select text in the document and click "Explain" or "Search" to see knowledge cards here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Selection Popup (Tooltip) -->
+    <div class="selection-popup hidden" id="selection-popup">
+        <button class="popup-btn" id="btn-meaning"><i class="fa-solid fa-book"></i> Meaning</button>
+        <button class="popup-btn" id="btn-translate"><i class="fa-solid fa-language"></i> Translate</button>
+        <button class="popup-btn highlight-btn" id="btn-explain"><i class="fa-solid fa-wand-magic-sparkles"></i> Explain Simply</button>
+        <button class="popup-btn wiki-btn" id="btn-wikipedia"><i class="fa-brands fa-wikipedia-w"></i> Wikipedia</button>
+    </div>
+
+    <!-- PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Set worker path
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="components/document-viewer.js"></script>
+    <script src="components/notes-editor.js"></script>
+    <script src="components/selection-popup.js"></script>
+</body>
+</html>
